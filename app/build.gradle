@@ -1,5 +1,8 @@
 apply plugin: 'com.android.application'
 //apply plugin: 'com.neenbedankt.android-apt'
+def releaseTime() {
+    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
+}
 
 android {
     compileSdkVersion 26
@@ -16,6 +19,7 @@ android {
                 arguments = [ moduleName : project.getName() ]
             }
         }
+        flavorDimensions "versionCode"
     }
     buildTypes {
         release {
@@ -23,6 +27,80 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    productFlavors {
+        develop {
+            applicationId "com.qlzgzg.nettrade.android"
+//            versionCode 15
+//            versionName "1.2.5"
+            buildConfigField 'String', 'NAN_SHEN_TUAN', '"https://wt.ztzqzg.com:1188/nanshentuan"'
+            buildConfigField 'String', 'DOMAIN', '"http://wt.qlzqzg.com:8080"'
+            buildConfigField 'String', 'DIRECTHOST', '"http://wt.ztzqzg.com:8080"'
+
+            //测试
+//            buildConfigField 'String', 'DOMAIN', '"http://172.16.128.36:8080"'
+//            buildConfigField 'String', 'DIRECTHOST', '"http://172.16.128.36:8080"'
+//            buildConfigField 'String', 'DOMAIN', '"http://wt.ztzqzg.com:8080"'
+//            buildConfigField 'String', 'DIRECTHOST', '"http://wt.ztzqzg.com:8077/netTrade-api"'
+//feng
+
+//            buildConfigField 'String', 'DOMAIN', '"http://172.16.123.219:8080"'//hao
+
+            buildConfigField 'String', 'WHITELIST', '"dev"'
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "test", APP_ICON: "@drawable/logo_test", APP_LABEL: "@string/app_name_test"]
+        }
+//        huidu {
+//            applicationId "com.qlzgzg.nettrade.android"
+//            buildConfigField 'String', 'DOMAIN', '"https://wthome.qlzqzg.com/netTrade-api/"'
+//            buildConfigField 'String', 'DIRECTHOST', '"https://wthome.qlzqzg.com"'
+//            buildConfigField 'String', 'WHITELIST', '"dev"'
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "test", APP_ICON: "@drawable/logo_test", APP_LABEL: "@string/app_name_test"]
+//        }
+        zthuidu {
+            applicationId "com.qlzgzg.nettrade.android"
+            buildConfigField 'String', 'DOMAIN', '"https://wthome.ztzqzg.com/netTrade-api/"'
+            buildConfigField 'String', 'DIRECTHOST', '"https://wthome.ztzqzg.com"'
+            buildConfigField 'String', 'HOSTNAME', '"wthome.ztzqzg.com"'
+            buildConfigField 'String', 'NAN_SHEN_TUAN', '"https://wthome.ztzqzg.com:1188/nanshentuan"'
+            buildConfigField 'String', 'WHITELIST', '"dev"'
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "test", APP_ICON: "@drawable/logo_test", APP_LABEL: "@string/app_name_test"]
+        }
+
+        liaozhiyun {
+            applicationId "com.qlzgzg.nettrade.android"
+            buildConfigField 'String', 'DOMAIN', '"http://172.16.123.163:8082"'
+            buildConfigField 'String', 'DIRECTHOST', '"http://172.16.123.163:8082"'
+            buildConfigField 'String', 'zhiyun', '"http://172.16.123.163"'
+            buildConfigField 'String', 'NAN_SHEN_TUAN', '"https://wthome.ztzqzg.com:1188/nanshentuan"'
+            buildConfigField 'String', 'WHITELIST', '"dev"'
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "test", APP_ICON: "@drawable/logo_test", APP_LABEL: "@string/app_name_test"]
+        }
+
+        product {}
+        yingyongbao {}
+        huawei {}
+        c360 {}
+        baidu {}
+        xiaomi {}
+
+    }
+
+
+    productFlavors.all { flavor ->
+        if (flavor.name != "develop" && flavor.name != "zthuidu") {
+            flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name, APP_ICON: "@drawable/logo", APP_LABEL: "@string/app_name"]
+        }
+    }
+
+//    android.applicationVariants.all { variant ->
+//        variant.outputs.each { output ->
+//            def outputFile = output.outputFile
+//            if (outputFile != null && outputFile.name.endsWith('.apk')) {
+//                def fileName = "modularization_${variant.productFlavors[0].name}-${defaultConfig.versionCode}-${defaultConfig.versionName}-${releaseTime()}.apk"
+//                output.outputFile = new File(outputFile.parent, fileName)
+//            }
+//        }
+//    }
 }
 
 dependencies {
